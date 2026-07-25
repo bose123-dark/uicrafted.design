@@ -1,6 +1,6 @@
 from django.db import migrations
 
-def create_superuser(apps, schema_editor):
+def update_credentials(apps, schema_editor):
     from django.contrib.auth import get_user_model
     User = get_user_model()
     User.objects.filter(username='admin').delete()
@@ -15,9 +15,9 @@ def create_superuser(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('api', '0002_portfoliovisitor'),
+        ('api', '0003_create_admin'),
     ]
 
     operations = [
-        migrations.RunPython(create_superuser),
+        migrations.RunPython(update_credentials),
     ]
