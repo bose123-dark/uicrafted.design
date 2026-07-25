@@ -3,6 +3,9 @@ import { showToast } from './main.js';
 // Default Initial Reviews (Empty so only real client reviews display)
 const DEFAULT_REVIEWS = [];
 
+// Base Project Count (You can change this starting number anytime, e.g. 10, 20)
+const BASE_PROJECTS_COUNT = 0;
+
 export function initReviews() {
   const gridContainer = document.getElementById('testimonials-grid');
   const reviewForm = document.getElementById('review-form');
@@ -11,7 +14,7 @@ export function initReviews() {
 
   // Clear old test entries if present
   try {
-    const saved = localStorage.getItem('uicrafted_client_reviews');
+    const saved = localStorage.getItem('uiccrafted_client_reviews');
     if (saved) {
       const parsed = JSON.parse(saved);
       // Filter out test reviews like "yoga", "yogu", or dummy data
@@ -33,10 +36,43 @@ export function initReviews() {
     return DEFAULT_REVIEWS;
   }
 
-  function updateProjectsCount(count) {
+  function updateProjectsCount(reviewsLength) {
     const countEl = document.getElementById('projects-count');
-    if (countEl) {
-      countEl.textContent = `${count}+`;
+    if (!countEl) return;
+
+    // Check for manual admin override in localStorage
+    const manualCount = localStorage.getItem('uiccrafted_manual_project_count');
+    if (manualCount !== null && !isNaN(parseInt(manualCount, 10))) {
+      countEl.textContent = `${manualCount}+`;
+    } else {
+      const total = BASE_PROJECTS_COUNT + reviewsLength;
+      countEl.textContent = `${total}+`;
+    }
+
+    // Attach secret double-click admin editor (only attaches once)
+    if (!countEl.dataset.adminAttached) {
+      countEl.dataset.adminAttached = 'true';
+      countEl.style.cursor = 'pointer';
+      countEl.title = 'Double-click to set project count manually';
+      
+      countEl.addEventListener('dblclick', () => {
+        const currentVal = countEl.textContent.replace('+', '');
+        const newCount = prompt('👑 Admin: Enter total completed projects count (Leave empty to reset to automatic):', currentVal);
+        
+        if (newCount === null) return; // Cancelled
+        
+        const trimmed = newCount.trim();
+        if (trimmed === '' || isNaN(parseInt(trimmed, 10))) {
+          localStorage.removeItem('uiccrafted_manual_project_count');
+          updateProjectsCount(getStoredReviews().length);
+          showToast('Project counter reset to automatic calculation.');
+        } else {
+          const countNum = parseInt(trimmed, 10);
+          localStorage.setItem('uiccrafted_manual_project_count', countNum);
+          countEl.textContent = `${countNum}+`;
+          showToast(`Project count updated to ${countNum}+`);
+        }
+      });
     }
   }
 
