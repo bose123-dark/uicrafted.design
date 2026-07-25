@@ -33,8 +33,17 @@ export function initReviews() {
     return DEFAULT_REVIEWS;
   }
 
+  function updateProjectsCount(count) {
+    const countEl = document.getElementById('projects-count');
+    if (countEl) {
+      countEl.textContent = `${count}+`;
+    }
+  }
+
   function renderReviews() {
     const reviews = getStoredReviews();
+    updateProjectsCount(reviews.length);
+
     if (reviews.length === 0) {
       gridContainer.innerHTML = `
         <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 3rem 2rem; background: var(--bg-card); border: 1px dashed var(--border-glass); border-radius: var(--radius-lg); backdrop-filter: blur(16px);">
