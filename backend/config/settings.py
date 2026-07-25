@@ -42,7 +42,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR.parent],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,6 +75,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR.parent / 'src',
+    BASE_DIR.parent / 'public',
+    BASE_DIR.parent / 'assets',
+]
+
+WHITENOISE_ROOT = BASE_DIR.parent
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
