@@ -31,12 +31,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Automatic Visitor Tracking (Normal URL & Custom Links)
   const urlParams = new URLSearchParams(window.location.search);
-  const clientId = urlParams.get('ref') || urlParams.get('client') || urlParams.get('c');
+  const clientId = urlParams.get('ref') || urlParams.get('client') || urlParams.get('c') || '';
   let sourceStr = 'Direct Visit / Instagram Bio';
   if (document.referrer) {
     try { sourceStr = new URL(document.referrer).hostname; } catch(e) {}
   }
 
+  // 1. Image Beacon Tracker (100% reliable)
+  const imgBeacon = new Image();
+  imgBeacon.src = `/api/track-visit/?ref=${encodeURIComponent(clientId)}&source=${encodeURIComponent(sourceStr)}&t=${Date.now()}`;
+
+  // 2. JSON Fetch Tracker
   fetch('/api/track-visit/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

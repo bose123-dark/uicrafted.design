@@ -34,10 +34,13 @@ class ContactInquiryCreateView(generics.CreateAPIView):
     queryset = ContactInquiry.objects.all()
     serializer_class = ContactInquirySerializer
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 def track_visit_view(request):
-    client_id = request.data.get('client_id')
-    source = request.data.get('source', 'Direct Visit / Instagram Bio')
+    client_id = request.data.get('client_id') if request.method == 'POST' else (request.GET.get('ref') or request.GET.get('client_id') or request.GET.get('client'))
+    source = request.data.get('source') if request.method == 'POST' else request.GET.get('source')
+    if not source:
+        source = 'Direct Visit / Instagram Bio'
+
     today = datetime.date.today()
     
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
