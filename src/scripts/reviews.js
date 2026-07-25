@@ -9,10 +9,21 @@ export function initReviews() {
 
   if (!gridContainer) return;
 
+  // Clear old test entries if present
+  try {
+    const saved = localStorage.getItem('uicrafted_client_reviews');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Filter out test reviews like "yoga", "yogu", or dummy data
+      const cleaned = parsed.filter(r => r.name && !['yoga', 'yogu', 'test'].includes(r.name.toLowerCase().trim()));
+      localStorage.setItem('uiccrafted_client_reviews', JSON.stringify(cleaned));
+    }
+  } catch (e) {}
+
   // Load reviews from localStorage or default
   function getStoredReviews() {
     try {
-      const saved = localStorage.getItem('uicrafted_client_reviews');
+      const saved = localStorage.getItem('uiccrafted_client_reviews');
       if (saved) {
         return JSON.parse(saved);
       }
@@ -24,6 +35,15 @@ export function initReviews() {
 
   function renderReviews() {
     const reviews = getStoredReviews();
+    if (reviews.length === 0) {
+      gridContainer.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 3rem 2rem; background: var(--bg-card); border: 1px dashed var(--border-glass); border-radius: var(--radius-lg); backdrop-filter: blur(16px);">
+          ✨ No client reviews yet. Be the first to submit your feedback below!
+        </div>
+      `;
+      return;
+    }
+
     gridContainer.innerHTML = reviews.map(r => {
       const starsStr = '⭐'.repeat(r.rating || 5);
       return `
