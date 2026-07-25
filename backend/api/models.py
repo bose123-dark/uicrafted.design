@@ -26,3 +26,18 @@ class ContactInquiry(models.Model):
 
     def __str__(self):
         return f"Inquiry from {self.name} for {self.service}"
+
+class PortfolioVisitor(models.Model):
+    client_id = models.CharField(max_length=255)
+    ip_address = models.CharField(max_length=50, blank=True, null=True)
+    visit_date = models.DateField(auto_now_add=True)
+    last_visit_time = models.DateTimeField(auto_now=True)
+    today_views_count = models.IntegerField(default=1)
+
+    class Meta:
+        ordering = ['-last_visit_time']
+        unique_together = ('client_id', 'visit_date')
+
+    def __str__(self):
+        return f"{self.client_id} (Date: {self.visit_date}, Views Today: {self.today_views_count})"
+

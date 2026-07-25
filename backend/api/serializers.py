@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Review, ProjectStat, ContactInquiry
+from .models import Review, ProjectStat, ContactInquiry, PortfolioVisitor
 
 class ReviewSerializer(serializers.ModelSerializer):
     avatar = serializers.SerializerMethodField()
@@ -25,3 +25,8 @@ class ContactInquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactInquiry
         fields = ['id', 'name', 'service', 'message', 'created_at']
+
+class PortfolioVisitorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PortfolioVisitor
+        fields = ['id', 'client_id', 'ip_address', 'visit_date', 'last_visit_time', 'today_views_count']

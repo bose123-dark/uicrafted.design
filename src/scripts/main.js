@@ -29,6 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
   initReviews();
 
+  // Automatic Client Visitor Tracking
+  const urlParams = new URLSearchParams(window.location.search);
+  const clientId = urlParams.get('ref') || urlParams.get('client') || urlParams.get('c');
+  if (clientId) {
+    fetch('/api/track-visit/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ client_id: clientId })
+    }).catch(err => console.log('Track visit note:', err));
+  }
+
   // Sticky Header Effect
   const header = document.querySelector('.header');
   window.addEventListener('scroll', () => {

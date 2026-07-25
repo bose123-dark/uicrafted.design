@@ -1,8 +1,9 @@
+import datetime
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Review, ProjectStat, ContactInquiry
-from .serializers import ReviewSerializer, ProjectStatSerializer, ContactInquirySerializer
+from .models import Review, ProjectStat, ContactInquiry, PortfolioVisitor
+from .serializers import ReviewSerializer, ProjectStatSerializer, ContactInquirySerializer, PortfolioVisitorSerializer
 
 class ReviewListCreateView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
@@ -32,3 +33,36 @@ def project_stat_view(request):
 class ContactInquiryCreateView(generics.CreateAPIView):
     queryset = ContactInquiry.objects.all()
     serializer_class = ContactInquirySerializer
+
+@api_view(['POST'])
+def track_visit_view(request):
+    client_id = request.data.get('client_id')
+    if not client_id:
+        return Response({'error': 'client_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    client_id = str(client_id).strip()
+    today = datetime.date.today()
+    
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+
+    visitor, created = PortfolioVisitor.objects.get_or_create(
+        client_id=client_id,
+        visit_date=today,
+        defaults={'ip_address': ip, 'today_views_count': 1}
+    )
+
+    if not created:
+        visitor.today_views_count += 1
+        visitor.save()
+
+    return Response({
+        'status': 'success',
+        'client_id': visitor.client_id,
+        'visit_date': visitor.visit_date,
+        'today_views_count': visitor.today_views_count,
+        'is_new_today': created
+    })

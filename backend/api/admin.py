@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Review, ProjectStat, ContactInquiry
+from .models import Review, ProjectStat, ContactInquiry, PortfolioVisitor
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
@@ -17,3 +17,10 @@ class ContactInquiryAdmin(admin.ModelAdmin):
     list_display = ('name', 'service', 'created_at')
     search_fields = ('name', 'service', 'message')
     readonly_fields = ('created_at',)
+
+@admin.register(PortfolioVisitor)
+class PortfolioVisitorAdmin(admin.ModelAdmin):
+    list_display = ('client_id', 'visit_date', 'today_views_count', 'last_visit_time', 'ip_address')
+    list_filter = ('visit_date',)
+    search_fields = ('client_id', 'ip_address')
+    ordering = ('-last_visit_time',)
