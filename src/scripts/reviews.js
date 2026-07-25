@@ -1,32 +1,7 @@
 import { showToast } from './main.js';
 
-// Default Initial Reviews
-const DEFAULT_REVIEWS = [
-  {
-    id: "def-1",
-    name: "Arjun Kumar",
-    role: "Founder, Apex Tech",
-    avatar: "AK",
-    rating: 5,
-    text: "Amazing work. Bose AM delivered our brand identity within 48 hours and exceeded all expectations. Highly recommended!"
-  },
-  {
-    id: "def-2",
-    name: "Sneha Patel",
-    role: "Owner, Bloom Cafe",
-    avatar: "SP",
-    rating: 5,
-    text: "Very professional design process. The Instagram templates increased our engagement rate by over 150% in the first week."
-  },
-  {
-    id: "def-3",
-    name: "Rohan Mehta",
-    role: "CEO, Urban Wear",
-    avatar: "RM",
-    rating: 5,
-    text: "The case study approach UICRAFTED DESIGN uses showed us the exact logic behind our logo and packaging design."
-  }
-];
+// Default Initial Reviews (Empty so only real client reviews display)
+const DEFAULT_REVIEWS = [];
 
 export function initReviews() {
   const gridContainer = document.getElementById('testimonials-grid');
@@ -39,8 +14,7 @@ export function initReviews() {
     try {
       const saved = localStorage.getItem('uicrafted_client_reviews');
       if (saved) {
-        const parsed = JSON.parse(saved);
-        return [...parsed, ...DEFAULT_REVIEWS];
+        return JSON.parse(saved);
       }
     } catch (e) {
       console.error("Error loading stored reviews:", e);
