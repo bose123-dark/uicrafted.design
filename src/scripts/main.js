@@ -1,5 +1,6 @@
 import { initCursorGlow } from './cursor.js';
 import { initFAQ } from './faq.js';
+import { initReviews } from './reviews.js';
 
 // Global Toast Notification Helper
 export function showToast(message) {
@@ -26,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize Core Subsystems
   initCursorGlow();
   initFAQ();
+  initReviews();
 
   // Sticky Header Effect
   const header = document.querySelector('.header');

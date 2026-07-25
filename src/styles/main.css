@@ -1045,6 +1045,38 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 0.85rem;
 }
 
+/* LEAVE A REVIEW FORM */
+.review-form-wrapper {
+  margin-top: 3.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.review-form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+}
+
+.review-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .review-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* FAQ ACCORDION */
 .faq-list {
   max-width: 800px;
