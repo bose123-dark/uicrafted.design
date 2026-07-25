@@ -37,17 +37,19 @@ class ContactInquiryCreateView(generics.CreateAPIView):
 @api_view(['POST'])
 def track_visit_view(request):
     client_id = request.data.get('client_id')
-    if not client_id:
-        return Response({'error': 'client_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    client_id = str(client_id).strip()
+    source = request.data.get('source', 'Direct Visit / Instagram Bio')
     today = datetime.date.today()
     
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
+        ip = x_forwarded_for.split(',')[0].strip()
     else:
-        ip = request.META.get('REMOTE_ADDR')
+        ip = request.META.get('REMOTE_ADDR', '127.0.0.1')
+
+    if not client_id:
+        client_id = f"Visitor ({source} - IP: {ip})"
+    else:
+        client_id = str(client_id).strip()
 
     visitor, created = PortfolioVisitor.objects.get_or_create(
         client_id=client_id,
