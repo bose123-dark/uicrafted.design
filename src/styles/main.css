@@ -849,6 +849,24 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
 }
 
+/* 6-col layout when sketch box is present: 2 steps, sketch, 3 steps */
+.process-grid-with-sketch {
+  grid-template-columns: 1fr 1fr 1.3fr 1fr 1fr 1fr;
+  align-items: stretch;
+}
+
+@media (max-width: 1100px) {
+  .process-grid-with-sketch {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .process-grid-with-sketch {
+    grid-template-columns: 1fr;
+  }
+}
+
 .process-step {
   background: var(--bg-card);
   border: 1px solid var(--border-glass);
@@ -877,6 +895,299 @@ h1, h2, h3, h4, h5, h6 {
 .step-title {
   font-size: 1.2rem;
   font-weight: 700;
+}
+
+/* ── CENTER SKETCH BOX ── */
+.process-sketch-center {
+  display: flex;
+  align-items: stretch;
+}
+
+.psc-frame {
+  width: 100%;
+  padding: 3px;
+  background: var(--grad-primary);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 28px rgba(236, 72, 153, 0.4), 0 0 56px rgba(139, 92, 246, 0.2);
+  animation: pscGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes pscGlow {
+  0%  { box-shadow: 0 0 20px rgba(236,72,153,0.3), 0 0 40px rgba(139,92,246,0.15); }
+  100%{ box-shadow: 0 0 45px rgba(236,72,153,0.65), 0 0 90px rgba(139,92,246,0.4); }
+}
+
+.psc-inner {
+  background: rgba(10, 8, 26, 0.96);
+  border-radius: calc(var(--radius-md) - 2px);
+  padding: 1.5rem 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 2px dashed rgba(139, 92, 246, 0.35);
+  gap: 0.5rem;
+}
+
+/* Sketchpad ruled-line background */
+.psc-gridlines {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  pointer-events: none;
+  opacity: 0.06;
+}
+
+.psc-gridlines span {
+  border-bottom: 1px solid var(--purple-glow);
+}
+
+.psc-pencil {
+  font-size: 1.8rem;
+  position: relative;
+  z-index: 1;
+  animation: pencilRock 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes pencilRock {
+  0%  { transform: rotate(-8deg) translateY(0);    }
+  100%{ transform: rotate(8deg)  translateY(-5px); }
+}
+
+.psc-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.15rem;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.04em;
+}
+
+.psc-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  position: relative;
+  z-index: 1;
+  margin-top: 0.25rem;
+}
+
+.psc-tags span {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  white-space: nowrap;
+}
+
+
+/* DESIGN WORKFLOW SKETCH SECTION */
+.workflow-sketch-section {
+  background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.04) 50%, transparent 100%);
+}
+
+.workflow-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+/* Regular workflow nodes */
+.wf-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.25rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(16px);
+  min-width: 110px;
+  text-align: center;
+  transition: var(--transition);
+  cursor: default;
+}
+
+.wf-node:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+}
+
+.wf-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.wf-label {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.wf-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+  max-width: 90px;
+}
+
+/* Arrow connector */
+.wf-arrow {
+  font-size: 1.4rem;
+  color: var(--pink-glow);
+  opacity: 0.6;
+  flex-shrink: 0;
+  animation: arrowPulse 2s ease-in-out infinite alternate;
+  padding: 0 0.2rem;
+}
+
+@keyframes arrowPulse {
+  0%  { opacity: 0.4; transform: translateX(-2px); }
+  100%{ opacity: 1;   transform: translateX(2px);  }
+}
+
+/* CENTER highlighted sketch node */
+.wf-center {
+  background: transparent;
+  border: none;
+  padding: 0;
+  min-width: auto;
+}
+
+.wf-sketch-frame {
+  padding: 3px;
+  background: var(--grad-primary);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.35), 0 0 60px rgba(139, 92, 246, 0.2);
+  animation: sketchGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes sketchGlow {
+  0%  { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3), 0 0 40px rgba(139, 92, 246, 0.15); }
+  100%{ box-shadow: 0 0 40px rgba(236, 72, 153, 0.6), 0 0 80px rgba(139, 92, 246, 0.35); }
+}
+
+.wf-sketch-inner {
+  background: rgba(12, 10, 30, 0.95);
+  border-radius: calc(var(--radius-md) - 2px);
+  padding: 1.75rem 1.5rem;
+  min-width: 170px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  /* Dashed sketchpad inner border */
+  border: 2px dashed rgba(139, 92, 246, 0.4);
+}
+
+/* Grid lines background (sketchpad feel) */
+.sketch-grid-lines {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  pointer-events: none;
+  opacity: 0.08;
+}
+
+.sketch-grid-lines span {
+  border-bottom: 1px solid var(--purple-glow);
+}
+
+.wf-sketch-icon {
+  font-size: 2rem;
+  margin-bottom: 0.6rem;
+  position: relative;
+  z-index: 1;
+  animation: pencilBob 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes pencilBob {
+  0%  { transform: rotate(-5deg) translateY(0);   }
+  100%{ transform: rotate(5deg)  translateY(-4px);}
+}
+
+.wf-sketch-tag {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1rem;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.wf-sketch-sub {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+}
+
+/* Workflow tag pills at bottom */
+.workflow-tags-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.wf-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-glass);
+  color: var(--text-muted);
+  transition: var(--transition);
+  cursor: default;
+}
+
+.wf-tag-pill:hover {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
+}
+
+/* Responsive workflow */
+@media (max-width: 900px) {
+  .workflow-flow {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .wf-arrow {
+    transform: rotate(90deg);
+  }
+  @keyframes arrowPulse {
+    0%  { opacity: 0.4; transform: rotate(90deg) translateX(-2px); }
+    100%{ opacity: 1;   transform: rotate(90deg) translateX(2px);  }
+  }
 }
 
 /* PRICING SECTION */
